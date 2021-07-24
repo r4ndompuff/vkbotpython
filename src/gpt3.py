@@ -6,8 +6,9 @@ def gpt3(message, event):
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
             }
-    text = message[5:]
-    data = '{"text":"'+text+'"}'
+    text = message[5:].replace('\'', '')
+    print("Текст в гпт: ", text)
+    data = '{"text":"'+text.replace('"','')+'"}'
     response = requests.post('https://api.aicloud.sbercloud.ru/public/v1/public_inference/gpt3/predict', headers=headers, data=data.encode('utf-8'))
     while ("504 Gateway Time-out" in response.text):
         response = requests.post('https://api.aicloud.sbercloud.ru/public/v1/public_inference/gpt3/predict', headers=headers, data=data.encode('utf-8'))

@@ -12,7 +12,7 @@ def packMessage(row):
 	message = []
 	if text != "Null": # Собираем отправляемый текст
 		if row["Random answer"] == False: # Проверяем на то должен ли быть случайный ответ (случайный текст)
-			message.append(text)
+			message.append(text.replace("\\n","\n"))
 		else:
 			text = text.split(';')
 			k = random.randint(1, len(text)) - 1
@@ -37,11 +37,12 @@ def getMessage(text):
 	for i in range(len(df["Command"])):
 		cmds = str(df["Command"][i]).split(', ')
 		for cmd in cmds:
-			if ((cmd == text) and (df["Fully include"][i] == True)) or ((cmd in text) and (df["Fully include"][i] == False)): # Нашли команду
+			if ((text == cmd) and (df["Fully include"][i] == True)) or ((cmd in text.replace(',','').split(' ')) and (df["Fully include"][i] == False)): # Нашли команду
 				row = df.iloc[i]
 				message = packMessage(row)
 				return message
 	return ["None"]
+
 
 # Добавляем новую команду
 def newCMD(text, evnt):
